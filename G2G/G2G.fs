@@ -15,6 +15,8 @@ type Customer = VIAPerson | SOSUPerson
 //type CreditCard = {Number:int}
 //type Cash = {Amount: int}
 //type MobilePay = {}
+
+
 type Payment = CreditCard | Cash | MobilePay
 
 type Order = {ProductList: Product[]; Payment: Payment; Customer: Customer}
@@ -36,5 +38,35 @@ let rec calculateProducts lst =
                 let ntotal = hd.Price + total
                 calculateHelper(tl, ntotal)
     calculateHelper(lst, 0)
-    
 
+///let OrderMsgSystem =
+  //  MailboxProcessor<Order>.Start(fun inbox ->
+  //  let rec loop () =
+  //      async {
+  //          let! (message, replyChannel) = inbox.Receive()
+  //          replyChannel.Reply(String.Format("Received message: {0}", message))
+ //           do! loop ()
+ //       }
+ //   loop ())
+///
+let OrderMsgSystem =
+    MailboxProcessor<Order>.Start(fun inbox ->
+        let rec processMessage state = 
+            async {
+                let! msg = inbox.Recieve()
+                printfn "recieved a order!"
+                let rec calculateProducts msg =
+                    let rec calculateHelper (msg, total) =
+                        match lst with
+                            | [] -> total
+                            | hd::tl -> 
+                                match hd.Type with
+                                    | DrinkType.Coffee -> 
+                                        // include the VAT thing
+                                    | _ ->
+                                        let ntotal = hd.Price + total
+                                        calculateHelper(tl, ntotal)
+                    calculateHelper(msg, 0)          
+                printfn "processed the order! Please pay %f DKK" total     
+                            }
+                            processMessage "initialState")
