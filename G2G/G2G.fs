@@ -39,16 +39,8 @@ let rec calculateProducts lst =
                 calculateHelper(tl, ntotal)
     calculateHelper(lst, 0)
 
-///let OrderMsgSystem =
-  //  MailboxProcessor<Order>.Start(fun inbox ->
-  //  let rec loop () =
-  //      async {
-  //          let! (message, replyChannel) = inbox.Receive()
-  //          replyChannel.Reply(String.Format("Received message: {0}", message))
- //           do! loop ()
- //       }
- //   loop ())
-///
+/// ------------------------------------------------------------------------- ///
+
 let OrderMsgSystem =
     MailboxProcessor<Order>.Start(fun inbox ->
         let rec processMessage state = 
@@ -62,7 +54,7 @@ let OrderMsgSystem =
                             | hd::tl -> 
                                 match hd.Type with
                                     | DrinkType.Coffee -> 
-                                        // include the VAT thing
+                                        fun 
                                     | _ ->
                                         let ntotal = hd.Price + total
                                         calculateHelper(tl, ntotal)
@@ -70,3 +62,6 @@ let OrderMsgSystem =
                 printfn "processed the order! Please pay %f DKK" total     
                             }
                             processMessage "initialState")
+
+// I dont get 
+let gtgVat n x = x * (1 + n/100)
