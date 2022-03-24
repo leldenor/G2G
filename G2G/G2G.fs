@@ -38,7 +38,7 @@ let rec calculateProducts lst =
             | hd::tl ->
                 match hd.ProductType.Type with
                     | Coffee -> 
-                        let x = (hd.ProductType.Price + (gtgVat hd.ProductType.Price 2.5)) * hd.Amount + total
+                        let x = (gtgVat 25 hd.ProductType.Price) * hd.Amount + total
                         calculateHelper(tl, x)
                     | _ ->
                        let ntotal = hd.ProductType.Price * hd.Amount + total
@@ -58,9 +58,9 @@ let OrderMsgSystem =
             }
         processMessage)
 
-let product1 = {ProductType = green; Amount = 2}
+let product1 = {ProductType = latte; Amount = 2}
 let product2 = {ProductType = apple; Amount = 10}
-OrderMsgSystem.Post({ProductList = [product2]; Payment = Cash; Customer = VIAPerson})
+OrderMsgSystem.Post({ProductList = [product2; product1]; Payment = Cash; Customer = VIAPerson})
 
 
 
