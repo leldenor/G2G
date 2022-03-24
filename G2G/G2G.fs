@@ -54,7 +54,9 @@ let OrderMsgSystem =
                             | hd::tl -> 
                                 match hd.Type with
                                     | DrinkType.Coffee -> 
-                                        fun 
+                                        let vatCalc = gtgVat 23 hd.Price
+                                        let ntotal = vatCalc + total
+                                        calculateHelper(tl, ntotal)
                                     | _ ->
                                         let ntotal = hd.Price + total
                                         calculateHelper(tl, ntotal)
@@ -63,5 +65,5 @@ let OrderMsgSystem =
                             }
                             processMessage "initialState")
 
-// I dont get 
+// I dont get what he means by int -> float
 let gtgVat n x = x * (1 + n/100)
